@@ -28,4 +28,7 @@ class HttpStats:
 
     def print_stats(self):
         formatter.clear_screen()
-        print('\n'.join(["{}\t{}".format(views, page) for page, views in self.top_pages(10)]))
+        print("\n".join(["{}\t{}".format(views, page) for page, views in self.top_pages(10)]))
+        print("---")
+        print("Page views: {}".format(len(self.log)))
+        print("Unique IPs: {}".format(self.unique_ips))
