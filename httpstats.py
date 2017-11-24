@@ -26,9 +26,15 @@ class HttpStats:
     def top_pages(self, n):
         return sorted(self.page_views.items(), key=lambda x: -x[1])[:n]
 
+    def total_pageviews(self):
+        return len(self.log)
+
+    def num_unique_ips(self):
+        return self.unique_ips
+
     def print_stats(self):
         formatter.clear_screen()
         print("\n".join(["{}\t{}".format(views, page) for page, views in self.top_pages(10)]))
         print("---")
-        print("Page views: {}".format(len(self.log)))
-        print("Unique IPs: {}".format(self.unique_ips))
+        print("Page views: {}".format(self.total_pageviews()))
+        print("Unique IPs: {}".format(self.num_unique_ips()))

@@ -5,8 +5,8 @@ from datetime import datetime, timezone, timedelta
 from httpstats import HttpStats
 from httplog import HttpLog
 
-def gen_log_for_page(page):
-    return HttpLog.from_str('127.0.0.1 user-identifier userid [10/Oct/2000:13:55:36 -0700] "GET {} HTTP/1.0" 200 1234'.format(page))
+def gen_log_for_page(page, ip="127.0.0.1"):
+    return HttpLog.from_str('{} user-identifier userid [10/Oct/2000:13:55:36 -0700] "GET {} HTTP/1.0" 200 1234'.format(ip, page))
 
 class TestHttpLog:
     def test_top_pages(self):
@@ -21,3 +21,25 @@ class TestHttpLog:
         assert len(top2) == 2
         assert top2[0] == ("/page_c", 300)
         assert top2[1] == ("/page_b", 200)
+
+    def test_total_pageviews(self):
+        stats = HttpStats()
+        for _ in range(100):
+            stats.add(gen_log_for_page("/foobar"))
+        assert stats.total_pageviews() == 100
+        for _ in range(100):
+            stats.add(gen_log_for_page("/foobar"))
+        assert stats.total_pageviews() == 200
+
+    def test_num_unique_ips(self):
+        stats = HttpStats()
+        for i in range(100):
+            stats.add(gen_log_for_page("/foobar", ip="10.0.0.{}".format(i)))
+            stats.add(gen_log_for_page("/foobar", ip="10.0.0.{}".format(i)))
+        assert stats.num_unique_ips() == 100
+        for i in range(100):
+            stats.add(gen_log_for_page("/foobar", ip="10.0.0.{}".format(i)))
+        assert stats.num_unique_ips() == 100
+        for i in range(100):
+            stats.add(gen_log_for_page("/foobar", ip="10.1.0.{}".format(i)))
+        assert stats.num_unique_ips() == 200
