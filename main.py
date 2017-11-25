@@ -9,7 +9,7 @@ from httpstats import HttpStats
 
 def main(filename, time_window, update_interval):
     input_file = open(filename, "r")
-    stats = HttpStats()
+    stats = HttpStats(time_window)
     last_update = datetime(1,1,1) #TODO(Wesley) this is a hack
     up_to_date = False
 
