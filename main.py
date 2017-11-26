@@ -29,8 +29,8 @@ def main(filename, time_window, update_interval):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Show statistics about HTTP logs.')
     parser.add_argument('file', type=str, help='what file to read from')
-    parser.add_argument('--time-window', '-t', type=int, default=0, help='what time window to view stats over (seconds, default=∞)')
-    parser.add_argument('--update-interval', '-u', type=int, default=10, help='how often to update the screen (seconds, default=10)')
+    parser.add_argument('--time-window', type=int, default=0, help='what time window to view stats over (seconds, default=∞)')
+    parser.add_argument('--update-interval', type=int, default=10, help='how often to update the screen (seconds, default=10)')
 
     args = parser.parse_args()
     main(args.file, args.time_window, args.update_interval)
