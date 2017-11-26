@@ -16,11 +16,11 @@ def main(filename, time_window, update_interval, alert_window, alert_threshold):
 
     while True:
         line_str = input_file.readline()
-        logline = HttpLog.from_str(line_str)
         if line_str:
+            up_to_date = False
+            logline = HttpLog.from_str(line_str)
             if logline:
                 stats.add(logline)
-            up_to_date = False
         else:
             up_to_date = True
         if up_to_date and datetime.now() - last_update > timedelta(0,update_interval):
