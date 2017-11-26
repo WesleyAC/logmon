@@ -36,6 +36,11 @@ class HttpStats:
         if self.time_window != 0:
             since = datetime.now(tzlocal.get_localzone()) - timedelta(0, self.time_window)
         formatter.clear_screen()
+        if self.time_window == 0:
+            print("All time:")
+        else:
+            print("Last {} seconds:".format(self.time_window))
+        print("---")
         print("\n".join(["{}\t{}".format(views, page) for page, views in self.top_pages(10, since)]))
         print("---")
         print("Page views: {}".format(self.total_pageviews(since)))
