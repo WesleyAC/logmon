@@ -3,11 +3,13 @@
 import sys
 import argparse
 from datetime import datetime, timedelta
+import shutil
 import tzlocal
 
 from httplog import HttpLog
 from httpstats import HttpStats
 from alerts import AlertManager
+import formatter
 
 def main(filename, time_window, update_interval, alert_window, alert_threshold):
     if filename != "-":
@@ -18,6 +20,9 @@ def main(filename, time_window, update_interval, alert_window, alert_threshold):
     alert_manager = AlertManager(alert_threshold)
     last_update = datetime(1,1,1) #TODO(Wesley) this is a hack
     up_to_date = False
+    #TODO(Wesley) Should handle SIGWINCH and reset this value.
+    # Another option would be to get this value in the main loop.
+    term_height = shutil.get_terminal_size((80, 20))[1]
 
     while True:
         line_str = input_file.readline()
@@ -29,10 +34,14 @@ def main(filename, time_window, update_interval, alert_window, alert_threshold):
         else:
             up_to_date = True
         if up_to_date and datetime.now() - last_update > timedelta(0,update_interval):
+            exit()
             alert_manager.update(stats.total_pageviews(datetime.now(tzlocal.get_localzone()) - timedelta(0, alert_window)), datetime.now())
-            #TODO(Wesley) make sure everything fits on the window
-            stats.print_stats()
-            alert_manager.print_alerts(5)
+            formatter.clear_screen()
+            stats_str = str(str(stats))
+            print(stats_str)
+            lines_left = term_height - stats_str.count("\n") - 1
+            print(alert_manager.to_str(lines_left), end="")
+            sys.stdout.flush()
             last_update = datetime.now()
 
 if __name__ == "__main__":

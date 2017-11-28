@@ -31,17 +31,18 @@ class HttpStats:
     def num_unique_ips(self, since):
         return len(set([x.ip for x in filter(lambda x: since is None or x.timestamp > since, self.log)]))
 
-    def print_stats(self):
+    def __str__(self):
         since = None
         if self.time_window != 0:
             since = datetime.now(tzlocal.get_localzone()) - timedelta(0, self.time_window)
-        formatter.clear_screen()
+        out = ""
         if self.time_window == 0:
-            print("All time:")
+            out += "All time:\n"
         else:
-            print("Last {} seconds:".format(self.time_window))
-        print("---")
-        print("\n".join(["{}\t{}".format(views, page) for page, views in self.top_pages(10, since)]))
-        print("---")
-        print("Page views: {}".format(self.total_pageviews(since)))
-        print("Unique IPs: {}".format(self.num_unique_ips(since)))
+            out += "Last {} seconds:\n".format(self.time_window)
+        out += "---\n"
+        out += "\n".join(["{}\t{}".format(views, page) for page, views in self.top_pages(10, since)])
+        out += "\n---\n"
+        out += "Page views: {}\n".format(self.total_pageviews(since))
+        out += "Unique IPs: {}".format(self.num_unique_ips(since))
+        return out

@@ -37,5 +37,10 @@ class AlertManager:
             self.alerts.append(AlertEvent(EventType.recovered, hits, time))
             self.in_alert = False
 
-    def print_alerts(self, max_alerts):
-        print("\n".join([str(e) for e in self.alerts[:max_alerts]]))
+    def to_str(self, max_alerts):
+        out = ""
+        if len(self.alerts) > max_alerts:
+            max_alerts -= 1
+            out += "(more alerts above)\n"
+        out += "\n".join([str(e) for e in self.alerts[max(0,len(self.alerts)-max_alerts):]])
+        return out
