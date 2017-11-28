@@ -11,7 +11,10 @@ from alerts import AlertManager
 
 def main(filename, time_window, update_interval, alert_window, alert_threshold):
     #TODO(Wesley) use alert_window and alert_threshold
-    input_file = open(filename, "r")
+    if filename != "-":
+        input_file = open(filename, "r")
+    else:
+        input_file = sys.stdin
     stats = HttpStats(time_window)
     alert_manager = AlertManager(alert_threshold)
     last_update = datetime(1,1,1) #TODO(Wesley) this is a hack
