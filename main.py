@@ -19,7 +19,6 @@ def main(filename, time_window, update_interval, alert_window, alert_threshold):
     stats = HttpStats(time_window)
     alert_manager = AlertManager(alert_threshold)
     last_update = datetime(1,1,1) #TODO(Wesley) this is a hack
-    up_to_date = False
     #TODO(Wesley) Should handle SIGWINCH and reset this value.
     # Another option would be to get this value in the main loop.
     term_height = shutil.get_terminal_size((80, 20))[1]
@@ -27,13 +26,10 @@ def main(filename, time_window, update_interval, alert_window, alert_threshold):
     while True:
         line_str = input_file.readline()
         if line_str:
-            up_to_date = False
             logline = HttpLog.from_str(line_str)
             if logline:
                 stats.add(logline)
-        else:
-            up_to_date = True
-        if up_to_date and datetime.now() - last_update > timedelta(0,update_interval):
+        elif datetime.now() - last_update > timedelta(0,update_interval):
             exit()
             alert_manager.update(stats.total_pageviews(datetime.now(tzlocal.get_localzone()) - timedelta(0, alert_window)), datetime.now())
             formatter.clear_screen()
