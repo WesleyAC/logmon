@@ -1,6 +1,8 @@
 import re
 from datetime import datetime
 
+from fast_strptime import fast_strptime
+
 class HttpLog:
     log_re = re.compile(r"(\S+)\s(\S+)\s(\S+)\s\[([^\]]+)\]\s\"([A-Z]+)\s(\S+)\sHTTP\/(\d+\.\d+)\"\s(\d+)\s(\d+)")
 
@@ -20,7 +22,7 @@ class HttpLog:
         match = cls.log_re.match(log_line)
         if match:
             try:
-                timestamp = datetime.strptime(match.group(4), "%d/%b/%Y:%H:%M:%S %z") #TODO(Wesley): Support for other formats
+                timestamp = fast_strptime(match.group(4))
             except ValueError:
                 return None
             if timestamp:
