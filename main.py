@@ -10,7 +10,6 @@ from httpstats import HttpStats
 from alerts import AlertManager
 
 def main(filename, time_window, update_interval, alert_window, alert_threshold):
-    #TODO(Wesley) use alert_window and alert_threshold
     if filename != "-":
         input_file = open(filename, "r")
     else:
