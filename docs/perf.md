@@ -8,7 +8,7 @@ In terms of real performance, on an Intel Core i3-3227U @ 1.90GHz (A low-end lap
 
 ## `strptime` fix
 
-Initially, `logmon` was about 2.4x slower than it is now. The primary bottleneck in `logmon`'s performance is converting the line from the log into a HttpLog object. The most CPU-intensive part of this is parsing the time from a formatted string into a datetime object. Using strptime, it took about 15.95 seconds to parse 100k lines. Running a profiler gives the following flame graph:
+Initially, `logmon` was about 2.4x slower than it is now. The primary bottleneck in `logmon`'s performance is converting the line from the log into a HttpLog object. The most CPU-intensive part of this is parsing the time from a formatted string into a datetime object. Using strptime, it took about 15.95 seconds to parse 100k lines. Running a profiler gives the following [flame graph](http://www.brendangregg.com/flamegraphs.html):
 
 ![builtin strptime flame graph](./perf100k_bad.svg)
 
