@@ -14,7 +14,6 @@ def main():
     while True:
         logline = '{ip} - - [{timestamp}] "GET {url} HTTP/1.0" {status} {size}'.format(ip=random.choice(ips), timestamp=tzlocal.get_localzone().localize(datetime.now()).strftime("%d/%b/%Y:%H:%M:%S %z"), url=random.choice(urls), status=random.choice(statuses), size=random.choice(sizes))
         print(logline)
-        time.sleep(0.1)
 
 if __name__ == "__main__":
     main()

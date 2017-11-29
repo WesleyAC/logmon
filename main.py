@@ -33,6 +33,7 @@ def main(filename, time_window, update_interval, alert_window, alert_threshold):
             alert_manager.update(stats.total_pageviews(datetime.now(tzlocal.get_localzone()) - timedelta(0, alert_window)), datetime.now())
             formatter.clear_screen()
             stats_str = str(str(stats))
+            print("")
             print(stats_str)
             lines_left = term_height - stats_str.count("\n") - 1
             print(alert_manager.to_str(lines_left), end="")
