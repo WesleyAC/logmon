@@ -30,7 +30,6 @@ def main(filename, time_window, update_interval, alert_window, alert_threshold):
             if logline:
                 stats.add(logline)
         elif datetime.now() - last_update > timedelta(0,update_interval):
-            exit()
             alert_manager.update(stats.total_pageviews(datetime.now(tzlocal.get_localzone()) - timedelta(0, alert_window)), datetime.now())
             formatter.clear_screen()
             stats_str = str(str(stats))
