@@ -21,13 +21,16 @@ def fast_strptime(t):
             "Nov": 11,
             "Dec": 12
     }
-    day = int(t[:2])
-    month = month_lookup[t[3:6]]
-    year = int(t[7:11])
-    hour = int(t[12:14])
-    min = int(t[15:17])
-    sec = int(t[18:20])
-    tz_dir = -1 if t[21] == "-" else 1
-    tz_hour = int(t[22:24]) * tz_dir
-    tz_min = int(t[24:26]) * tz_dir
-    return datetime(day, month, year, hour, min, sec, 0, timezone(timedelta(hours=tz_hour, minutes=tz_min)))
+    try:
+        day = int(t[:2])
+        month = month_lookup[t[3:6]]
+        year = int(t[7:11])
+        hour = int(t[12:14])
+        min = int(t[15:17])
+        sec = int(t[18:20])
+        tz_dir = -1 if t[21] == "-" else 1
+        tz_hour = int(t[22:24]) * tz_dir
+        tz_min = int(t[24:26]) * tz_dir
+        return datetime(year, month, day, hour, min, sec, 0, timezone(timedelta(hours=tz_hour, minutes=tz_min)))
+    except IndexError:
+        raise ValueError # mimic strptime
